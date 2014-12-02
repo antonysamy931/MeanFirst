@@ -8,5 +8,11 @@ app.controller("First", ["$scope","$http",function($scope,$http){
     }).error(function(data,status,headers,config){
 
     });
-    $scope.model="First application lanch";
+    $scope.Create=function() {
+        $http.post('/Service/Create',{data:$scope.person}).success(function(data,status,headers,config){
+            console.log(data);
+        }).error(function(data,status,headers,config){
+
+        });
+    };
 }]);

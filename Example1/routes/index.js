@@ -10,8 +10,4 @@ router.get("/",function(req,res){
    res.sendfile(_dir+"Index.html")
 });
 
-router.get("/am",function(req,res){
-   res.send("am new");
-});
-
 module.exports = router;

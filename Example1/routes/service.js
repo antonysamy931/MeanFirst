@@ -7,12 +7,24 @@ var mongoose=require('mongoose');
 
 mongoose.connect("mongodb://localhost/Antony");
 
-var personShema={
-    name:String,
-    age:String
-};
+var db=mongoose.connection;
 
-var person=mongoose.model('person',personShema,'first');
+db.on('error',function(err){
+    console.log('Connection error'+err);
+});
+
+db.once('open',function(){
+    console.log('Connection open');
+});
+
+var Shema=mongoose.Schema;
+
+var personShema= new Shema({
+    name:String,
+    email:String
+});
+
+var person=mongoose.model('person',personShema,'People');
 
 router.get("/",function(req,res){
     person.find(function(err,doc){
@@ -20,4 +32,19 @@ router.get("/",function(req,res){
     });
 });
 
+router.post("/Create",function(req,res){
+    var user=new person({
+        "name":req.body.data.name,
+        "email":req.body.data.email
+    });
+
+    user.save(function(err,data){
+        if(err){
+            console.log(err);
+        }else{
+            console.log(data);
+        }
+       res.send(data);
+    });
+});
 module.exports=router;
