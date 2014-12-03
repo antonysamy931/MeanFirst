@@ -4,6 +4,8 @@
 var express=require('express');
 var router=express.Router();
 var mongoose=require('mongoose');
+var multiparty=require('multiparty');
+var fs=require('fs');
 
 mongoose.connect("mongodb://localhost/Antony");
 
@@ -47,4 +49,56 @@ router.post("/Create",function(req,res){
        res.send(data);
     });
 });
+
+router.get("/Find/:id",function(req,res){
+    person.findById(req.params.id,function(err,doc){
+        if(!err){
+            res.send(doc);
+        }else{
+            console.log(err);
+        }
+    });
+});
+
+router.put("/Update/:id",function(req,res){
+
+    /*Update record method one*/
+    person.findById(req.params.id,function(err,doc){
+        doc.name=req.body.data.name;
+        doc.email=req.body.data.email;
+        doc.save(function(err){
+            res.send(err);
+        });
+    });
+
+    /*Update record method two*/
+    /*var conditions={"_id":req.body.data._id};
+    var update={$set:{"name":req.body.data.name,"email":req.body.data.email}};
+    var options={upsert:true};
+
+    person.update(conditions,update,options,function(err){
+        res.send(err);
+    });*/
+
+});
+
+router.delete("/Delete/:id",function(req,res){
+    person.findById(req.params.id,function(err,doc){
+       if(!err){
+           doc.remove(function(err){
+                res.send('success');
+           });
+       }
+    });
+});
+
+router.post("/image-upload",function(req,res){
+    var form =new multiparty.Form();
+    form.parse(req,function(err,fields,files){
+        fs.readFile(files.file[0].path,'utf8',function(err,data){
+            console.log(data);
+        });
+    });
+});
+
 module.exports=router;

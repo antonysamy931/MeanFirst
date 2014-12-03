@@ -1,20 +1,27 @@
 <table>
     <thead>
     <tr>
-        <th>Id</th><th>Name</th><th>Age</th>
+        <th>Id</th><th>Name</th><th>Age</th><th></th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="person in people">
-        <td>{{person._id}}</td>
+        <td><a href="" ng-click="Find(person._id)">Edit</a></td>
         <td>{{person.name}}</td>
         <td>{{person.email}}</td>
+        <td><a href="" ng-click="Delete(person._id)">Delete</a></td>
     </tr>
     </tbody>
 </table>
 
-    <form ng-submit="Create()">
+    <form ng-submit="SaveImage()" enctype="multipart/form-data">
+        <input type="hidden" ng-model="person._id" />
         Name<input type="text" ng-model="person.name" placeholder="Enter name" /><br/>
         Email<input type="email" ng-model="person.email" placeholder="Enter email" />
         <input type="submit" value="CREATE" />
+        <br/>
+        Image <input type="file" name="profile" onchange="angular.element(this).scope().ImageUpload(this)"
+                     onclick="this.value = null" />
+        <img src="#" id="previewImage" />
+        <input type="button" ng-click="SaveImage()" value="Save"/>
     </form>
