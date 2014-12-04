@@ -26,7 +26,15 @@ var personShema= new Shema({
     email:String
 });
 
+var userShema=new Shema({
+    name:String,
+    email:String,
+   image:{data:Buffer,ContentType:String}
+});
+
 var person=mongoose.model('person',personShema,'People');
+
+var users=mongoose.model('user',userShema,'User');
 
 router.get("/",function(req,res){
     person.find(function(err,doc){
@@ -44,7 +52,7 @@ router.post("/Create",function(req,res){
         if(err){
             console.log(err);
         }else{
-            console.log(data);
+            console.log("success");
         }
        res.send(data);
     });
@@ -95,10 +103,33 @@ router.delete("/Delete/:id",function(req,res){
 router.post("/image-upload",function(req,res){
     var form =new multiparty.Form();
     form.parse(req,function(err,fields,files){
-        fs.readFile(files.file[0].path,'utf8',function(err,data){
-            console.log(data);
+        var objPerson=new users();
+        objPerson.name=fields.name;
+        objPerson.email=fields.email;
+        objPerson.image.ContentType=fields.image;
+        objPerson.image.data=fs.readFileSync(files.file[0].path);
+        objPerson.save(function(err,data){
+            if(err){
+                console.log(err);
+            }else{
+                console.log(data);
+            }
+            res.send(data);
         });
     });
 });
+
+router.get("/Users",function(req,res){
+   users.find(function(err,doc){
+       res.send(doc);
+   });
+});
+
+router.get("/User/Image/:id",function(req,res){
+    users.findById(req.params.id,function(err,doc){
+        res.contentType(doc.image.ContentType);
+        res.send(doc.image.data);
+    });
+})
 
 module.exports=router;

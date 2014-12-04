@@ -1,20 +1,35 @@
 <table>
     <thead>
-    <tr>
-        <th>Id</th><th>Name</th><th>Age</th><th></th>
-    </tr>
+        <tr>
+            <th>Id</th><th>Name</th><th>Email</th><th></th>
+        </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="person in people">
-        <td><a href="" ng-click="Find(person._id)">Edit</a></td>
-        <td>{{person.name}}</td>
-        <td>{{person.email}}</td>
-        <td><a href="" ng-click="Delete(person._id)">Delete</a></td>
-    </tr>
+        <tr ng-repeat="person in people">
+            <td><a href="" ng-click="Find(person._id)">Edit</a></td>
+            <td>{{person.name}}</td>
+            <td>{{person.email}}</td>
+            <td><a href="" ng-click="Delete(person._id)">Delete</a></td>
+        </tr>
     </tbody>
 </table>
-
-    <form ng-submit="SaveImage()" enctype="multipart/form-data">
+<br/>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th><th>Name</th><th>Email</th><th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="user in users">
+                    <td>{{user._id}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                    <td><img src="service/User/Image/{{user._id}}" /></td>
+                </tr>
+            </tbody>
+        </table>
+    <form ng-submit="Create()" enctype="multipart/form-data">
         <input type="hidden" ng-model="person._id" />
         Name<input type="text" ng-model="person.name" placeholder="Enter name" /><br/>
         Email<input type="email" ng-model="person.email" placeholder="Enter email" />

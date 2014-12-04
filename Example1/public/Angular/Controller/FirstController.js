@@ -8,6 +8,14 @@ app.controller("First", ["$scope","$http","$upload",function($scope,$http,$uploa
             $scope.people=data;
         }).error(function(data,status,headers,config){
         });
+        $http({
+            method:'GET',
+            url:'/service/Users'
+        }).success(function(data,status,headers,config){
+            $scope.users=data;
+        }).error(function(err,status,headers,config){
+
+        })
     };
 
     GetRecords();
@@ -54,18 +62,16 @@ app.controller("First", ["$scope","$http","$upload",function($scope,$http,$uploa
     };
 
     $scope.SaveImage=function(){
-      var formData=new FormData();
-        angular.forEach($scope.files,function(file){
-           formData.append('file',file);
-        });
+        $scope.person.image=$scope.files[0].type;
 
         var upload=$upload.upload({
             url:'/Service/image-upload',
-            file:$scope.files[0]
-        }).process(function(evt){
-
+            file:$scope.files[0],
+            data:$scope.person
+        }).progress(function(evt){
+            console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
         }).success(function(data,status,headers,config){
-            console.log(data);
+            GetRecords();
         });
     };
 
